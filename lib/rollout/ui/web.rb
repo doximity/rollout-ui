@@ -37,7 +37,7 @@ module Rollout::UI
 
     get '/features/:feature_name' do
       @rollout = config.get(:instance)
-      @feature = @rollout.get(Rack::Utils.escape_html(params[:feature_name]))
+      @feature = @rollout.get(params[:feature_name])
 
       if json_request?
         json(feature_to_hash(@feature))
