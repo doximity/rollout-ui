@@ -72,6 +72,15 @@ RSpec.describe 'Web UI' do
     ROLLOUT.delete(:fake_test_feature_for_rollout_ui_webspec)
   end
 
+  it "rescapes javascript in the action index" do
+    ROLLOUT.activate(:'+alert(1)+')
+
+    get '/'
+
+    expect(last_response).to be_ok
+    expect(last_response.body).to include('Rollout UI') & include("&amp;#x27;+alert(1)+&amp;#x27;")
+  end
+
   it "renders show html" do
     get '/features/test'
 
