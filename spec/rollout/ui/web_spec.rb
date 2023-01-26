@@ -79,12 +79,19 @@ RSpec.describe 'Web UI' do
     expect(last_response.body).to include('Rollout UI') & include('test')
   end
 
+  it "escapes javascript in the action show" do
+    get "/features/'+alert(1)+'"
+
+    expect(last_response).to be_ok
+    expect(last_response.body).to include('Rollout UI') & include("&amp;#x27;+alert(1)+&amp;#x27;")
+  end
+
   it "renders show json" do
     ROLLOUT.activate(:fake_test_feature_for_rollout_ui_webspec)
     header 'Accept', 'application/json'
- 
+
     get '/features/fake_test_feature_for_rollout_ui_webspec'
- 
+
     expect(last_response).to be_ok
     expect(last_response.headers).to include('Content-Type' => 'application/json')
     response = JSON.parse(last_response.body)
